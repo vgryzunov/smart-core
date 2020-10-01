@@ -1,0 +1,6 @@
+# core server configuration
+server:
+  http:
+    port: 18000
+
+
