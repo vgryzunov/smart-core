@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	log "github.com/sirupsen/logrus"
@@ -7,9 +7,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "tok-proxy",
-	Short: "TokProxy",
-	Long:  "Token Proxy Program",
+	Use:   "smart-core",
+	Short: "SmartCore",
+	Long:  "Smart Core Composer",
 	Run:   Server,
 }
 

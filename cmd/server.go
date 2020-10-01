@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"github.com/go-chi/chi"
@@ -39,6 +39,7 @@ func Server(cmd *cobra.Command, agrs []string) {
 	originUrl := viper.GetString(OriginUrlFlag)
 	log.Printf("Origin URL: %s", originUrl)
 
+	// TODO: Origin must be determined by context
 	origin, parseErr := url.Parse(originUrl)
 	if parseErr != nil {
 		log.Fatalln(parseErr)
@@ -50,22 +51,9 @@ func Server(cmd *cobra.Command, agrs []string) {
 			log.Println("**** Director ****")
 
 			headers := req.Header
-			xAuthToken := headers.Get("X-Auth-Token")
-			log.Printf("X-Auth-Token: %s", xAuthToken)
 
 			xAuthUserId := headers.Get("X-Auth-Userid")
-			log.Printf("X-Auth-Usedid: %s", xAuthUserId)
-
-			xAuthEmail := headers.Get("X-Auth-Email")
-			log.Printf("X-Auth-Usedid: %s", xAuthEmail)
-
-			req.SetBasicAuth(xAuthEmail, xAuthToken)
-
-			for name := range headers {
-				if strings.HasPrefix(name, "X-Auth-") {
-					headers.Del(name)
-				}
-			}
+			log.Printf("X-Auth-Userid: %s", xAuthUserId)
 
 			headers.Add("X-Forwarded-Host", req.Host)
 			headers.Add("X-Origin-Host", origin.Host)
