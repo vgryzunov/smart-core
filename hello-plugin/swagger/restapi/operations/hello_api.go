@@ -42,8 +42,8 @@ func NewHelloAPI(spec *loads.Document) *HelloAPI {
 
 		TxtProducer: runtime.TextProducer(),
 
-		GetHostnameHandler: GetHostnameHandlerFunc(func(params GetHostnameParams) middleware.Responder {
-			return middleware.NotImplemented("operation GetHostname has not yet been implemented")
+		GetHelloSubjectHandler: GetHelloSubjectHandlerFunc(func(params GetHelloSubjectParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetHelloSubject has not yet been implemented")
 		}),
 	}
 }
@@ -79,8 +79,8 @@ type HelloAPI struct {
 	//   - text/plain
 	TxtProducer runtime.Producer
 
-	// GetHostnameHandler sets the operation handler for the get hostname operation
-	GetHostnameHandler GetHostnameHandler
+	// GetHelloSubjectHandler sets the operation handler for the get hello subject operation
+	GetHelloSubjectHandler GetHelloSubjectHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -157,8 +157,8 @@ func (o *HelloAPI) Validate() error {
 		unregistered = append(unregistered, "TxtProducer")
 	}
 
-	if o.GetHostnameHandler == nil {
-		unregistered = append(unregistered, "GetHostnameHandler")
+	if o.GetHelloSubjectHandler == nil {
+		unregistered = append(unregistered, "GetHelloSubjectHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -251,7 +251,7 @@ func (o *HelloAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/hostname"] = NewGetHostname(o.context, o.GetHostnameHandler)
+	o.handlers["GET"]["/hello/{subject}"] = NewGetHelloSubject(o.context, o.GetHelloSubjectHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

@@ -10,7 +10,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	"smart-core/swagger/restapi/operations"
+	"github.com/vgryzunov/smart-core/hello-plugin/swagger/restapi/operations"
 )
 
 //go:generate swagger generate server --target ../../swagger --name Hello --spec ../swagger.yml --principal interface{} --exclude-main
@@ -37,9 +37,9 @@ func configureAPI(api *operations.HelloAPI) http.Handler {
 
 	api.TxtProducer = runtime.TextProducer()
 
-	if api.GetHostnameHandler == nil {
-		api.GetHostnameHandler = operations.GetHostnameHandlerFunc(func(params operations.GetHostnameParams) middleware.Responder {
-			return middleware.NotImplemented("operation operations.GetHostname has not yet been implemented")
+	if api.GetHelloSubjectHandler == nil {
+		api.GetHelloSubjectHandler = operations.GetHelloSubjectHandlerFunc(func(params operations.GetHelloSubjectParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetHelloSubject has not yet been implemented")
 		})
 	}
 

@@ -18,23 +18,35 @@ var (
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
+  "schemes": [
+    "http"
+  ],
   "swagger": "2.0",
   "info": {
-    "title": "Hello",
+    "title": "Sample Plugin",
     "version": "0.0.1"
   },
   "paths": {
-    "/hostname": {
+    "/hello/{subject}": {
       "get": {
         "produces": [
           "text/plain"
         ],
-        "operationId": "getHostname",
+        "summary": "Returns response to greetinge.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Subject to greet.",
+            "name": "subject",
+            "in": "path",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
-            "description": "returns the hostname of the machine",
+            "description": "returns response greeting",
             "schema": {
-              "description": "the hostname of the machine",
+              "description": "tresponse from service",
               "type": "string"
             }
           },
@@ -67,23 +79,35 @@ func init() {
   }
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
+  "schemes": [
+    "http"
+  ],
   "swagger": "2.0",
   "info": {
-    "title": "Hello",
+    "title": "Sample Plugin",
     "version": "0.0.1"
   },
   "paths": {
-    "/hostname": {
+    "/hello/{subject}": {
       "get": {
         "produces": [
           "text/plain"
         ],
-        "operationId": "getHostname",
+        "summary": "Returns response to greetinge.",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Subject to greet.",
+            "name": "subject",
+            "in": "path",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
-            "description": "returns the hostname of the machine",
+            "description": "returns response greeting",
             "schema": {
-              "description": "the hostname of the machine",
+              "description": "tresponse from service",
               "type": "string"
             }
           },

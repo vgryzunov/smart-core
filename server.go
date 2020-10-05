@@ -4,8 +4,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"net/http"
+	"plugin"
 )
+
+type Plugin interface {
+	Start()
+}
 
 func Server(cmd *cobra.Command, agrs []string) {
 
@@ -14,18 +18,33 @@ func Server(cmd *cobra.Command, agrs []string) {
 	log.Print("Config file used: ", viper.ConfigFileUsed())
 	port := viper.GetString(HttpPortFlag)
 	log.Printf("Using HTTP Port: %s", port)
+
+	mod := "./bin/hello-plugin.go"
+	startModule(mod)
 }
 
-func tokenAuthOnly(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("*** tokenAuthOnly handler ****")
-		headers := r.Header
-		xAuthToken := headers.Get("X-Auth-Token")
-		if xAuthToken == "" {
-			log.Printf("Not Authenticated. Missing authentication X-Auth-Token")
-			http.Error(w, http.StatusText(403), 403)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
+func startModule(modPath string) {
+	// load module
+	// 1. open the so file to load the symbols
+	plug, err := plugin.Open(modPath)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// 2. look up a symbol (an exported function or variable)
+	// in this case, variable Greeter
+	symPlugin, err := plug.Lookup("Plugin")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	// 3. Assert that loaded symbol is of a desired type
+	// in this case interface type Greeter (defined above)
+	var mod Plugin
+	mod, ok := symPlugin.(Plugin)
+	if !ok {
+		log.Fatalln("unexpected type from module symbol")
+	}
+
+	// 4. use the module
+	mod.Start()
 }

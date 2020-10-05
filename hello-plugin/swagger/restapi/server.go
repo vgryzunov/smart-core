@@ -25,7 +25,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"golang.org/x/net/netutil"
 
-	"smart-core/swagger/restapi/operations"
+	"github.com/vgryzunov/smart-core/hello-plugin/swagger/restapi/operations"
 )
 
 const (

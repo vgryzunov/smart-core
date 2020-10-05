@@ -1,6 +1,8 @@
+swagger: "2.0"
 info:
-  title: Hello
+  title: Sample Plugin
   version: 0.0.1
+
 definitions:
   error:
     type: object
@@ -12,21 +14,29 @@ definitions:
         format: int64
       message:
         type: string
+
 paths:
-  /hostname:
+  /hello/{subject}:
     get:
-      operationId: getHostname
       produces:
-      - text/plain
+        - text/plain
+      summary: Returns response to greetinge.
+      parameters:
+        - in: path
+          name: subject
+          required: true
+          type: string
+          description: Subject to greet.
       responses:
         200:
-          description: returns the hostname of the machine
+          description: returns response greeting
           schema:
-            description: the hostname of the machine
+            description: tresponse from service
             type: string
         default:
           description: error
           schema:
             $ref: "#/definitions/error"
-swagger: "2.0"
+schemes:
+- http
 
